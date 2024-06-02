@@ -1,0 +1,21 @@
+{
+  "name": "n",
+  "version": "1.0.0",
+  "description": "This project is a data analysis of given names in Israel from the years 1948 to 2021. The data is divided into two categories: males and females, and is further divided by religion (Jews, Muslims, and Christians).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonfile": "^6.1.0",
+    "multer": "^1.4.5-lts.1",
+    "plotly": "^1.0.6",
+    "xlsx": "^0.18.5"
+  }
+}
