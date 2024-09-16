@@ -27,20 +27,22 @@ const clearData = (data) => {
     });
 };
 
+const dataFilePath = path.join(__dirname, 'data', 'Names.xlsx');
 const data = {
     Jews: {
-        M: clearData(readExcelFile('./data/Names.xlsx', 'יהודים')),
-        F: clearData(readExcelFile('./data/Names.xlsx', 'יהודיות')),
+        M: clearData(readExcelFile(dataFilePath, 'יהודים')),
+        F: clearData(readExcelFile(dataFilePath, 'יהודיות')),
     },
     Muslims: {
-        M: clearData(readExcelFile('./data/Names.xlsx', 'מוסלמים')),
-        F: clearData(readExcelFile('./data/Names.xlsx', 'מוסלמיות')),
+        M: clearData(readExcelFile(dataFilePath, 'מוסלמים')),
+        F: clearData(readExcelFile(dataFilePath, 'מוסלמיות')),
     },
     Christians: {
-        M: clearData(readExcelFile('./data/Names.xlsx', 'נוצרים')),
-        F: clearData(readExcelFile('./data/Names.xlsx', 'נוצריות')),
+        M: clearData(readExcelFile(dataFilePath, 'נוצרים')),
+        F: clearData(readExcelFile(dataFilePath, 'נוצריות')),
     }
 };
+
 
 const createPlotData = (name, M_status, F_status, religion) => {
     let year_M = [], amount_M = [], year_F = [], amount_F = [], place_M = 0, place_F = 0;
