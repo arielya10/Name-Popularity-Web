@@ -99,9 +99,30 @@ app.get('/', (req, res) => {
 
 app.post('/', upload.none(), (req, res) => {
     const { name, M_status, F_status, religion } = req.body;
-    console.log("Request Data:", req.body);
+
+    console.log(`%c[INFO] %cReceived Data:`, 'color: blue; font-weight: bold;', 'color: black;', {
+        Name: name,
+        "Male Status": M_status === 'on',
+        "Female Status": F_status === 'on',
+        Religion: religion
+    });
+    
     const plotData = createPlotData(name, M_status === 'on', F_status === 'on', religion);
-    console.log("Plot Data:", plotData);
+    
+    // Log Plot Data in a more structured and professional way
+    console.log(`%c[INFO] %cGenerated Plot Data:`, 'color: green; font-weight: bold;', 'color: black;', {
+        "Years (Male)": plotData.year_M,
+        "Amounts (Male)": plotData.amount_M,
+        "Years (Female)": plotData.year_F,
+        "Amounts (Female)": plotData.amount_F,
+        Messages: plotData.messages
+    });
+
+    // Adding additional debugging information
+    console.log(`%c[DEBUG] %cNumber of years processed for Males: ${plotData.year_M.length}`, 'color: orange; font-weight: bold;', 'color: black;');
+    console.log(`%c[DEBUG] %cNumber of years processed for Females: ${plotData.year_F.length}`, 'color: orange; font-weight: bold;', 'color: black;');
+    console.log(`%c[DEBUG] %cMessages Returned: ${plotData.messages.length}`, 'color: orange; font-weight: bold;', 'color: black;');
+
     res.json({
         year_M: plotData.year_M,
         amount_M: plotData.amount_M,

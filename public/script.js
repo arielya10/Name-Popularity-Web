@@ -1,12 +1,41 @@
 let myChart;
 
-document.getElementById('form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = {};
-    formData.forEach((value, key) => {
-        data[key] = value;
-    });
+// Add event listeners to update the chart when the name input or other form fields change
+document.getElementById('name').addEventListener('input', debounce(updateChart, 300));  // Debounced input
+document.getElementById('M_status').addEventListener('change', updateChart);
+document.getElementById('F_status').addEventListener('change', updateChart);
+document.getElementById('religion').addEventListener('change', updateChart);
+
+// Debounce function to delay input processing
+function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+}
+
+// Function to fetch data and update chart dynamically
+function updateChart() {
+    const name = document.getElementById('name').value;
+    const M_status = document.getElementById('M_status').checked;
+    const F_status = document.getElementById('F_status').checked;
+    const religion = document.getElementById('religion').value;
+
+    // If the name input is empty, clear the chart and messages
+    if (!name) {
+        clearChartAndMessages();
+        return;
+    }
+
+    const data = {
+        name: name,
+        M_status: M_status ? 'on' : '',
+        F_status: F_status ? 'on' : '',
+        religion: religion
+    };
 
     fetch('/', {
         method: 'POST',
@@ -37,16 +66,16 @@ document.getElementById('form').addEventListener('submit', function(event) {
                     {
                         label: 'גברים',
                         data: result.amount_M,
-                        borderColor: '#4b77a9', // Blue with a softer shade
-                        backgroundColor: 'rgba(75, 119, 169, 0.2)', // Semi-transparent fill
+                        borderColor: '#4b77a9',
+                        backgroundColor: 'rgba(75, 119, 169, 0.2)',
                         fill: true,
                         hidden: !result.year_M.length
                     },
                     {
                         label: 'נשים',
                         data: result.amount_F,
-                        borderColor: '#e74c3c', // Bright red
-                        backgroundColor: 'rgba(231, 76, 60, 0.2)', // Semi-transparent fill
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
                         fill: true,
                         hidden: !result.year_F.length
                     }
@@ -55,45 +84,18 @@ document.getElementById('form').addEventListener('submit', function(event) {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                title: {
-                    display: true,
-                    text: `שמות חדשים עבור ${data.name}`,
-                    fontSize: 18,
-                    fontColor: '#fff'
-                },
                 scales: {
                     x: {
-                        display: true,
                         title: {
                             display: true,
                             text: 'שנים',
-                            fontColor: '#fff'
-                        },
-                        ticks: {
-                            fontColor: '#fff'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.2)'
                         }
                     },
                     y: {
-                        display: true,
                         title: {
                             display: true,
-                            text: 'כמות',
-                            fontColor: '#fff'
-                        },
-                        ticks: {
-                            fontColor: '#fff'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.2)'
+                            text: 'כמות'
                         }
-                    }
-                },
-                legend: {
-                    labels: {
-                        fontColor: '#fff'
                     }
                 }
             }
@@ -102,4 +104,14 @@ document.getElementById('form').addEventListener('submit', function(event) {
     .catch(error => {
         console.error('Error:', error);
     });
-});
+}
+
+// Function to clear chart and messages when name input is empty
+function clearChartAndMessages() {
+    const messagesDiv = document.getElementById('messages');
+    messagesDiv.innerHTML = ''; // Clear messages
+
+    if (myChart) {
+        myChart.destroy(); // Clear the chart
+    }
+}

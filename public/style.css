@@ -38,7 +38,6 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
 }
 
 form > div {
@@ -55,10 +54,11 @@ form > div > label {
 }
 
 .form-container {
+    font-weight: bold;
+    font-size: 16px;
     padding: 20px;
     border: 4px solid #666; /* Darker border for contrast */
     border-radius: 10px;
-    margin-bottom: 20px;
     direction: rtl;
     background: rgba(255, 255, 255, 0.1); /* Semi-transparent background for glass effect */
     backdrop-filter: blur(10px); /* Blur effect */
@@ -90,10 +90,11 @@ form > div > label {
     margin-bottom: 10px;
     font-weight: bold;
     color: #ccc; /* Lighter color for footer text */
+    margin-top: 20px;
 }
 
 input[type="text"], select {
-    padding: 8px; /* Reduced padding */
+    padding: 6px;
     font-size: 16px; /* Smaller font size */
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -105,7 +106,6 @@ input[type="text"], select {
 
 input[type="checkbox"] {
     transform: scale(1.5);
-    margin-left: 5px;
 }
 
 input[type="submit"] {
@@ -148,45 +148,66 @@ canvas#chart {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive styles */
-@media screen and (max-width: 768px) {
+/* General Styles for mobile screens */
+@media (max-width: 768px) {
     body {
-        font-size: 18px; /* Slightly smaller font size on mobile */
-        height: auto; /* Adjust height */
-        display: block; /* Change display to block */
-        padding: 10px;
+        font-size: 16px; /* Reduce base font size for smaller screens */
+        padding: 0 10px; /* Add padding for better mobile spacing */
+    }
+
+    h1 {
+        font-size: 18px; /* Reduce title size */
+    }
+    
+    .messages{
+        font-size: 16px;
     }
 
     .container {
-        width: 100%; /* Full width on mobile */
-        padding: 10px; /* Reduce padding */
-        margin: 10px; /* Add margin for spacing */
+        max-width: 100%; /* Make the container full-width on mobile */
+        margin: 0; /* Remove margins */
+        padding: 10px; /* Add padding for better readability */
+    }
+
+    .form-container {
+        padding: 20px; /* Reduce padding for form container */
     }
 
     form > div {
-        flex-direction: column;
-        align-items: flex-start; /* Align items to start */
+        flex-direction: column; /* Stack form elements vertically */
+        align-items: flex-start; /* Align form elements to the left */
+        margin-bottom: 5px; /* Reduce space between form elements */
     }
 
     form > div > label {
-        margin-left: 0;
-        margin-bottom: 5px;
-        text-align: left; /* Left align text */
-        width: 100%; /* Full width for labels */
+        font-size: 14px; /* Smaller font for labels */
+    }
+
+    input[type="text"], select, input[type="submit"] {
+        font-size: 14px; /* Smaller font for input fields */
+        margin-left: 0; /* Remove the left margin */
+    }
+
+    input[type="checkbox"] {
+        margin-left: 0; /* Remove checkbox margin */
+        transform: scale(1.2); /* Slightly smaller checkboxes */
     }
 
     .chart-container {
-        width: 100%; /* Make the chart responsive */
-        height: auto; /* Maintain aspect ratio */
+        max-width: 100%; /* Make chart container full width */
+        padding: 10px; /* Add some padding around the chart */
+        overflow-x: hidden; /* Prevent horizontal overflow */
     }
 
-    input[type="text"], select {
-        font-size: 14px; /* Slightly smaller input font size on mobile */
-        width: 100%; /* Full width for inputs */
+    canvas#chart {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100%; /* Prevent the canvas from exceeding the container width */
+        overflow-x: hidden; /* Ensure the chart doesn't overflow horizontally */
     }
 
-    input[type="submit"] {
-        font-size: 16px; /* Slightly smaller button font size on mobile */
-        width: 100%; /* Full width for submit button */
+    .footer {
+        font-size: 12px; /* Smaller footer text */
+        margin-top: 10px; /* Adjust footer margin */
     }
 }
