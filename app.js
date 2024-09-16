@@ -11,9 +11,15 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Read and parse the Excel file at server startup
 const readExcelFile = (filePath, sheetName) => {
-    const workbook = xlsx.readFile(filePath);
-    return xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    try {
+        const workbook = xlsx.readFile(filePath);
+        return xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    } catch (error) {
+        console.error(`Error reading Excel file: ${error.message}`);
+        return [];
+    }
 };
 
 const clearData = (data) => {
@@ -27,6 +33,7 @@ const clearData = (data) => {
     });
 };
 
+// Define paths and load the Excel file once
 const dataFilePath = path.join(__dirname, 'data', 'Names.xlsx');
 const data = {
     Jews: {
@@ -43,7 +50,7 @@ const data = {
     }
 };
 
-
+// Function to create the plot data
 const createPlotData = (name, M_status, F_status, religion) => {
     let year_M = [], amount_M = [], year_F = [], amount_F = [], place_M = 0, place_F = 0;
     let messages = [];
@@ -92,13 +99,12 @@ const createPlotData = (name, M_status, F_status, religion) => {
     return { year_M, amount_M, year_F, amount_F, messages };
 };
 
-
-
-
+// Handle GET requests for the main page
 app.get('/', (req, res) => {
     res.render('index');
 });
 
+// Handle POST requests to process name data
 app.post('/', upload.none(), (req, res) => {
     const { name, M_status, F_status, religion } = req.body;
 
@@ -127,6 +133,7 @@ app.post('/', upload.none(), (req, res) => {
     }
 });
 
+// Start the server on the appropriate port
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
