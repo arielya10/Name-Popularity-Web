@@ -4,11 +4,5 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/app.js" }
-  ],
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 60,
-      "memory": 1024
-    }
-  }
+  ]
 }
