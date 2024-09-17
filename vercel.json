@@ -4,8 +4,5 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/app.js" }
-  ],
-  "analytics": {
-    "enabled": true
-  }
+  ]
 }
