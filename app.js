@@ -6,12 +6,17 @@ const path = require('path');
 const app = express();
 const upload = multer();
 
+// Serve static files (CSS, images, JS) from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Set the view engine to EJS for rendering views
 app.set('view engine', 'ejs');
+
+// Middleware for parsing URL-encoded data and JSON data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Read and parse the Excel file at server startup
+// Read the cleaned Excel file at server startup
 const readExcelFile = (filePath, sheetName) => {
     try {
         const workbook = xlsx.readFile(filePath);
@@ -22,31 +27,20 @@ const readExcelFile = (filePath, sheetName) => {
     }
 };
 
-const clearData = (data) => {
-    return data.map(row => {
-        for (let key in row) {
-            if (!['Names', 'Amount'].includes(key)) {
-                row[key] = parseInt(row[key]) || null;
-            }
-        }
-        return row;
-    });
-};
-
-// Define paths and load the Excel file once
-const dataFilePath = path.join(__dirname, 'data', 'Names.xlsx');
+// Define paths and load the cleaned Excel file once
+const cleanedDataFilePath = path.join(__dirname, 'data', 'CleanedNames.xlsx');
 const data = {
     Jews: {
-        M: clearData(readExcelFile(dataFilePath, 'יהודים')),
-        F: clearData(readExcelFile(dataFilePath, 'יהודיות')),
+        M: readExcelFile(cleanedDataFilePath, 'יהודים'),
+        F: readExcelFile(cleanedDataFilePath, 'יהודיות'),
     },
     Muslims: {
-        M: clearData(readExcelFile(dataFilePath, 'מוסלמים')),
-        F: clearData(readExcelFile(dataFilePath, 'מוסלמיות')),
+        M: readExcelFile(cleanedDataFilePath, 'מוסלמים'),
+        F: readExcelFile(cleanedDataFilePath, 'מוסלמיות'),
     },
     Christians: {
-        M: clearData(readExcelFile(dataFilePath, 'נוצרים')),
-        F: clearData(readExcelFile(dataFilePath, 'נוצריות')),
+        M: readExcelFile(cleanedDataFilePath, 'נוצרים'),
+        F: readExcelFile(cleanedDataFilePath, 'נוצריות'),
     }
 };
 
@@ -58,7 +52,7 @@ const createPlotData = (name, M_status, F_status, religion) => {
     const df_M = data[religion].M;
     const df_F = data[religion].F;
 
-    const allYears = Array.from({length: 2021 - 1948 + 1}, (_, i) => (1948 + i).toString());
+    const allYears = Array.from({ length: 2021 - 1948 + 1 }, (_, i) => (1948 + i).toString());
 
     const fillMissingYears = (years, amounts) => {
         const amountsMap = years.reduce((acc, year, idx) => {
